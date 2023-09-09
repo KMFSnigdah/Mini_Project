@@ -1,4 +1,4 @@
-package com.example.security.DTO;
+package com.example.security.DTO.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,7 @@ public class AuthenticationResponseDTO {
     private String email;
     private String firstname;
     private String lastname;
+    private String role;
+    private String address;
     private String token;
 }

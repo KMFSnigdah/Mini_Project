@@ -53,14 +53,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(CustomAccessDeniedException.class)
-//    public ResponseEntity<ErrorDetails> handleCustomAccessDeniedException(CustomAccessDeniedException exception,
-//                                                                          WebRequest webRequest) {
-//
-//        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-//                webRequest.getDescription(false));
-//        return ResponseEntity.status(exception.getStatus()).body(errorDetails);
-//    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
+                                                                        WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                webRequest.getDescription(false));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
+    }
 
 }
 

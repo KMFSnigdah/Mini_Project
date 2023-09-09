@@ -1,8 +1,9 @@
 package com.example.security.service.impl;
 
-import com.example.security.DTO.AuthenticationRequest;
-import com.example.security.DTO.AuthenticationResponseDTO;
-import com.example.security.DTO.RegisterRequest;
+import com.example.security.DTO.request.LogInRequestDto;
+import com.example.security.DTO.response.AuthenticationResponseDTO;
+import com.example.security.DTO.response.LogInResponseDTO;
+import com.example.security.DTO.request.RegisterRequest;
 import com.example.security.security.JwtService;
 import com.example.security.exception.AuthenticationException;
 import com.example.security.service.IAuthenticationService;
@@ -54,6 +55,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(userRole)
+                .address(request.getAddress())
                 .build();
 
         // Save the user to the database
@@ -67,11 +69,13 @@ public class AuthenticationService implements IAuthenticationService {
                 .email(user.getEmail())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())
+                .address(user.getAddress())
+                .role(user.getRole().toString())
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponseDTO authenticate(AuthenticationRequest request) {
+    public LogInResponseDTO authenticate(LogInRequestDto request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -84,11 +88,8 @@ public class AuthenticationService implements IAuthenticationService {
                     .orElseThrow(() -> new AuthenticationException(HttpStatus.NOT_FOUND, "User not found"));
 
             var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponseDTO.builder()
-                    .userId(user.getUserId())
+            return LogInResponseDTO.builder()
                     .email(user.getEmail())
-                    .firstname(user.getFirstName())
-                    .lastname(user.getLastName())
                     .token(jwtToken)
                     .build();
         } catch (BadCredentialsException e) {

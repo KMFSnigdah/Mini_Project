@@ -1,4 +1,4 @@
-package com.example.security.DTO;
+package com.example.security.DTO.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,6 +26,9 @@ public class RegisterRequest {
 
     @NotEmpty(message = "Password should not be null or empty")
     private String password;
+
+    @NotEmpty(message = "Address should not be null or empty")
+    private String address;
 
     @NotEmpty(message = "Role should not be null or empty")
     private String role;

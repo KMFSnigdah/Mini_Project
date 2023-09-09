@@ -10,7 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -34,13 +36,13 @@ public class    User implements UserDetails {
 
     private String password;
 
+    private String address;
+
+    @OneToMany(mappedBy = "user")
+    private Set<BookReview> reviews = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private Role role;
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(role.name()));
-//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package com.example.security.DTO;
+package com.example.security.DTO.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class LogInRequestDto {
     @NotEmpty(message = "Email should not be null or empty")
     @Email
     private String email;
