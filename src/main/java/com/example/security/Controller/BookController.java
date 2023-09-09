@@ -35,6 +35,7 @@ public class BookController {
         return ResponseHandler.generateResponse("Update Book Successfully", HttpStatus.OK, response);
     }
 
+    // http://localhost:8080/books/getAll?pageNo=1&pageSize=10&sortBy=title&sortDir=asc
     @GetMapping("/getAll")
     public ResponseEntity<Object> getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNo,

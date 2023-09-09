@@ -20,11 +20,11 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class    User implements UserDetails {
+public class   User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
 
     private String userId;
 
