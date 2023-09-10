@@ -6,6 +6,7 @@ import com.example.security.DTO.response.BookResponseDTO;
 import com.example.security.response.CustomResponse;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IBookService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +23,16 @@ public class BookController {
     }
 
     // Create a new Book
-    // http://localhost:8080/book/create
+    // http://localhost:8080/books/create
     @PostMapping("/create")
-    public ResponseEntity<Object> createBook(@RequestBody CreateBookDTO bookRequestDTO) {
+    public ResponseEntity<Object> createBook(@Valid @RequestBody CreateBookDTO bookRequestDTO) {
         BookResponseDTO response = bookService.createBook(bookRequestDTO);
         return ResponseHandler.generateResponse("Create Book Successfully", HttpStatus.CREATED, response);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> updateBook(@RequestBody UpdateBookDTO updateBookDTO, @PathVariable long id){
+    public ResponseEntity<Object> updateBook(@RequestBody UpdateBookDTO updateBookDTO,
+                                             @PathVariable long id){
         BookResponseDTO response = bookService.updateBook(id, updateBookDTO);
         return ResponseHandler.generateResponse("Update Book Successfully", HttpStatus.OK, response);
     }

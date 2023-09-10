@@ -25,7 +25,7 @@ public class AuthenticationController {
     private LogoutService logoutService;
 
     // For Registration account
-    // http://localhost:8080/api/auth/registration
+    // http://localhost:8080/api/auth/register
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request){
         AuthenticationResponseDTO responseDTO = authenticationService.register(request);

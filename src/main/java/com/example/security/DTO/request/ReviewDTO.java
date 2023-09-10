@@ -16,11 +16,11 @@ public class ReviewDTO {
 
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Ratting can't be empty")
     @Min(value = 0) // Minimum value allowed (0.0)
     @Max(value = 5) // Maximum value allowed (5.0)
     private BigDecimal rating;
 
-    @NotEmpty
+    @NotEmpty(message = "Review can't be empty")
     private String review;
 }

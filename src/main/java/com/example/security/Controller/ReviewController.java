@@ -33,7 +33,7 @@ public class ReviewController {
     }
 
     @PutMapping("/review/{reviewId}/user/{userId}")
-    public ResponseEntity<Object> updateComment(@Valid @PathVariable(value = "reviewId") long reviewId,
+    public ResponseEntity<Object> updateReview(@Valid @PathVariable(value = "reviewId") long reviewId,
                                                 @PathVariable(value = "userId") long userId,
                                                 @RequestBody ReviewDTO reviewDTO){
         ReviewDTO updatedReview = reviewService.updateReview(reviewId, userId, reviewDTO);

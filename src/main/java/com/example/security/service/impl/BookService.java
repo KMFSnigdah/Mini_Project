@@ -44,7 +44,8 @@ public class BookService implements IBookService {
     @Override
     public BookResponseDTO updateBook(long id, UpdateBookDTO bookDto) {
         // Check is book available or not
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Book", "id", id));
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());

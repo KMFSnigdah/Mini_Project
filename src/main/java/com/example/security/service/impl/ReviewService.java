@@ -4,14 +4,18 @@ import com.example.security.DTO.request.ReviewDTO;
 import com.example.security.entity.Book;
 import com.example.security.entity.BookReview;
 import com.example.security.entity.User;
+import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.BookRepository;
 import com.example.security.repository.ReviewRepository;
 import com.example.security.repository.UserRepository;
 import com.example.security.service.IReviewService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,11 +39,18 @@ public class ReviewService implements IReviewService {
         // DTO to Entity
         BookReview review = mapper.map(reviewDTO, BookReview.class);
 
+        // Check if the user has already reviewed the book
+        if (reviewRepository.existsByBookIdAndUserId(bookId, userId)) {
+            throw new CustomeException(HttpStatus.CONFLICT, "User has already reviewed this book.");
+        }
+
         // Check is book available or not
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new ResourceNotFoundException("Book", "id", bookId));
 
         // Check is review available or not
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Book", "id", bookId));
 
         // Set Book and User in Review Entity
         review.setBook(book);
@@ -47,6 +58,9 @@ public class ReviewService implements IReviewService {
 
         // Save Review Entity
         BookReview response = reviewRepository.save(review);
+
+        // Update the book's average rating
+        updateBookAverageRating(book);
         return mapper.map(response, ReviewDTO.class);
     }
 
@@ -70,7 +84,7 @@ public class ReviewService implements IReviewService {
         BookReview review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", reviewId));
 
-        if(review.getUser().getId() != user.getId()){
+        if (review.getUser().getId() != user.getId()) {
             throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);
         }
 
@@ -80,6 +94,8 @@ public class ReviewService implements IReviewService {
         // Update in Database
         BookReview updatedReview = reviewRepository.save(review);
 
+        // Update the book's average rating
+        updateBookAverageRating(review.getBook());
         return mapper.map(updatedReview, ReviewDTO.class);
     }
 
@@ -93,10 +109,34 @@ public class ReviewService implements IReviewService {
         BookReview review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", reviewId));
 
-        if(review.getUser().getId() != user.getId()){
+        if (review.getUser().getId() != user.getId()) {
             throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);
         }
-
+        // Update the book's average rating
         reviewRepository.delete(review);
+        updateBookAverageRating(review.getBook());
+    }
+
+    private void updateBookAverageRating(Book book) {
+        // Retrieve All Reviews by Book ID
+        List<BookReview> bookReviews = reviewRepository.findByBookId(book.getId());
+
+        // Calculate Average Rating
+        BigDecimal totalRating = BigDecimal.ZERO;
+        int numberOfReviews = bookReviews.size();
+
+        for (BookReview review : bookReviews) {
+            totalRating = totalRating.add(review.getRating());
+        }
+
+        BigDecimal averageRating = numberOfReviews > 0 ?
+                totalRating.divide(BigDecimal.valueOf(numberOfReviews), 2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+
+        // Update Book's Average Rating
+        book.setRating(averageRating);
+
+        // Update in Database
+        bookRepository.save(book);
     }
 }
