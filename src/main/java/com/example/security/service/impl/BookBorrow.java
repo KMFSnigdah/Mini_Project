@@ -42,6 +42,9 @@ public class BookBorrow implements IBookBorrow {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new ResourceNotFoundException("Book", "id", bookId));
 
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", bookId);
+
         // Check is Book available or not
         if (!book.isAvailable()) {
             throw new CustomeException(HttpStatus.NOT_FOUND, "This book is not available now.");
@@ -74,6 +77,8 @@ public class BookBorrow implements IBookBorrow {
         // Check is Book exists or not
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new ResourceNotFoundException("Book", "id", bookId));
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", bookId);
 
         if (book.isAvailable()) {
             throw new CustomeException(HttpStatus.BAD_REQUEST, "This book is not borrowed");

@@ -6,6 +6,7 @@ import com.example.security.DTO.response.BookResponseDTO;
 import com.example.security.entity.Book;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.BookRepository;
+import com.example.security.repository.ReviewRepository;
 import com.example.security.response.CustomResponse;
 import com.example.security.response.PaginationResponse;
 import com.example.security.service.IBookService;
@@ -17,17 +18,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService implements IBookService {
 
 
     private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
     private final ModelMapper mapper;
 
-    public BookService(BookRepository bookRepository, ModelMapper mapper) {
+    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, ModelMapper mapper) {
         this.bookRepository = bookRepository;
+        this.reviewRepository = reviewRepository;
         this.mapper = mapper;
     }
 
@@ -46,6 +48,9 @@ public class BookService implements IBookService {
         // Check is book available or not
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Book", "id", id));
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", id);
+        // Convert DTO to Entity
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());
@@ -66,7 +71,7 @@ public class BookService implements IBookService {
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<Book> books = bookRepository.findAll(pageable);
+        Page<Book> books = bookRepository.findByIsDeletedFalse(pageable);
 
         //get content for page object
         List<Book> listofbooks = books.getContent();
@@ -93,11 +98,19 @@ public class BookService implements IBookService {
     @Override
     public void deleteBook(long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
-        bookRepository.delete(book);
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", id);
+        // Set delete true
+        book.setDeleted(true);
+        // Save in database
+        bookRepository.save(book);
+        // Delete reviews
+        reviewRepository.deleteReviewsForByBookId(id);
     }
 
     // Convert Entity to DTO
     private BookResponseDTO mapToDto(Book book) {
         return mapper.map(book, BookResponseDTO.class);
     }
+
 }

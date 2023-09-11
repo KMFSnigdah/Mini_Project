@@ -39,18 +39,20 @@ public class ReviewService implements IReviewService {
         // DTO to Entity
         BookReview review = mapper.map(reviewDTO, BookReview.class);
 
+        // Check is book available or not
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new ResourceNotFoundException("Book", "id", bookId));
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", bookId);
+
         // Check if the user has already reviewed the book
         if (reviewRepository.existsByBookIdAndUserId(bookId, userId)) {
             throw new CustomeException(HttpStatus.CONFLICT, "User has already reviewed this book.");
         }
 
-        // Check is book available or not
-        Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new ResourceNotFoundException("Book", "id", bookId));
-
         // Check is review available or not
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("Book", "id", bookId));
+                () -> new ResourceNotFoundException("User", "id", bookId));
 
         // Set Book and User in Review Entity
         review.setBook(book);
@@ -67,7 +69,10 @@ public class ReviewService implements IReviewService {
     @Override
     public List<ReviewDTO> getReviewByBookId(long bookId) {
         // Check is book available or not
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () ->  new ResourceNotFoundException("Book", "id", bookId));
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", bookId);
         // Retrieve All Reviews by Book ID
         List<BookReview> bookReviews = reviewRepository.findByBookId(bookId);
         // Map Reviews to DTO & Return
@@ -83,6 +88,9 @@ public class ReviewService implements IReviewService {
         // Check is review available or not
         BookReview review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", reviewId));
+        // Check if Delete or not already
+        if (review.getBook().isDeleted())
+            throw new ResourceNotFoundException("Book", "id", review.getBook().getId());
 
         if (review.getUser().getId() != user.getId()) {
             throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);

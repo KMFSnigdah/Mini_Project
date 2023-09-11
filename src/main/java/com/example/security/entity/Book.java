@@ -32,6 +32,9 @@ public class Book {
     @Column(name = "isAvailable", nullable = false)
     private boolean isAvailable = true;
 
+    @Column(name = "isDeleted", nullable = false)
+    private boolean isDeleted = false;
+
     @Column(name = "rating")
     private BigDecimal rating = BigDecimal.ZERO;
 

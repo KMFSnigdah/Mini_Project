@@ -22,6 +22,6 @@ public class UserHistoryController {
     @GetMapping("/user/{userId}/history")
     public ResponseEntity<Object> getHistoryByUserId(@PathVariable long userId) {
         List<HistoryResponseDTO> response = userHistoryService.getHistoryByUserId(userId);
-        return ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
+        return ResponseHandler.generateResponse("Fetch History Successfully", HttpStatus.OK, response);
     }
 }
