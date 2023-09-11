@@ -47,6 +47,9 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = false)
     private Set<UserHistory> userHistory = new HashSet<>();
 
+    @OneToMany(mappedBy = "book", orphanRemoval = false)
+    private Set<BookReservation> reservation = new HashSet<>();
+
     public void setRating(BigDecimal rating) {
         if (rating != null) {
             this.rating = rating;

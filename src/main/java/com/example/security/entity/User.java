@@ -47,6 +47,9 @@ public class   User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserHistory> userHistory = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookReservation> reservation = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
