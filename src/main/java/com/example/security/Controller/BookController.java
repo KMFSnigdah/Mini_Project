@@ -6,11 +6,11 @@ import com.example.security.DTO.response.BookResponseDTO;
 import com.example.security.response.CustomResponse;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IBookService;
+import com.example.security.service.impl.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
 
 
 import static com.example.security.utils.Constants.*;
@@ -19,9 +19,11 @@ import static com.example.security.utils.Constants.*;
 @RequestMapping("/books")
 public class BookController {
     private final IBookService bookService;
+    private final AuthenticationService authenticationService;
 
-    public BookController(IBookService bookService) {
+    public BookController(IBookService bookService, AuthenticationService authenticationService) {
         this.bookService = bookService;
+        this.authenticationService = authenticationService;
     }
 
     // Create a new Book

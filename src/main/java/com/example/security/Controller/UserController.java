@@ -1,10 +1,10 @@
 package com.example.security.Controller;
 
-import com.example.security.DTO.request.ReviewDTO;
 import com.example.security.DTO.response.ResponseBook;
 import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IUserService;
+import com.example.security.service.impl.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +19,11 @@ import java.util.List;
 public class UserController {
 
     private final IUserService userService;
+    private final AuthenticationService authenticationService;
 
-    public UserController(IUserService userService) {
+    public UserController(IUserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/users/{userId}")

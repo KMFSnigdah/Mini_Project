@@ -2,6 +2,7 @@ package com.example.security.Controller;
 
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IReservationService;
+import com.example.security.service.impl.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/books")
 public class ReservationController {
     private final IReservationService reservationService;
-    public ReservationController(IReservationService reservationService) {
+    private final AuthenticationService authenticationService;
+    public ReservationController(IReservationService reservationService, AuthenticationService authenticationService) {
         this.reservationService = reservationService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/{bookId}/reserve/user/{userId}")

@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -112,4 +114,14 @@ public class AuthenticationService implements IAuthenticationService {
         return null;
     }
 
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            return userRepository.findByEmail(username)
+                    .orElseThrow(() -> new AuthenticationException(HttpStatus.NOT_FOUND, "User not found"));
+        } else {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+    }
 }

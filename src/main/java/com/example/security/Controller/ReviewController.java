@@ -3,6 +3,7 @@ package com.example.security.Controller;
 import com.example.security.DTO.request.ReviewDTO;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IReviewService;
+import com.example.security.service.impl.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,11 @@ import java.util.List;
 @RequestMapping("/books")
 public class ReviewController {
     private final IReviewService reviewService;
-    public ReviewController(IReviewService reviewService) {
+    private final AuthenticationService authenticationService;
+
+    public ReviewController(IReviewService reviewService, AuthenticationService authenticationService) {
         this.reviewService = reviewService;
+        this.authenticationService = authenticationService;
     }
     @PostMapping("/{bookId}/user/{userId}/reviews/create")
     public ResponseEntity<Object> createReview(@Valid @PathVariable long bookId,

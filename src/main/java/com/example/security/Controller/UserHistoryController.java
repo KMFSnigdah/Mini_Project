@@ -3,6 +3,7 @@ package com.example.security.Controller;
 import com.example.security.DTO.response.HistoryResponseDTO;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IUserHistory;
+import com.example.security.service.impl.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,10 @@ import java.util.List;
 @RequestMapping("/books")
 public class UserHistoryController {
     private final IUserHistory userHistoryService;
-    public UserHistoryController(IUserHistory userHistoryService) {
+    private final AuthenticationService authenticationService;
+    public UserHistoryController(IUserHistory userHistoryService, AuthenticationService authenticationService) {
         this.userHistoryService = userHistoryService;
+        this.authenticationService = authenticationService;
     }
     @GetMapping("/user/{userId}/history")
     public ResponseEntity<Object> getHistoryByUserId(@PathVariable long userId) {

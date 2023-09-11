@@ -1,7 +1,9 @@
 package com.example.security.Controller;
 
+import com.example.security.entity.User;
 import com.example.security.exception.AuthenticationException;
 import com.example.security.repository.UserRepository;
+import com.example.security.service.impl.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/student")
 public class StudentController {
     private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
 
-    public StudentController(UserRepository userRepository) {
+    public StudentController(UserRepository userRepository, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
+        this.authenticationService = authenticationService;
     }
 
     // This api authenticates for USER ROLE
     // http://localhost:8080/api/v1/student/get
     @GetMapping("/get")
     public ResponseEntity<String> sayHello(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        var user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new AuthenticationException(HttpStatus.NOT_FOUND, "User not found"));
-        System.out.println(user.getFirstName() + "hello mallika ");
+        User user = authenticationService.getAuthenticatedUser();
+        System.out.println(user.getFirstName() + "hello mallika " + user.getId());
         return ResponseEntity.ok("Hello from User API 1");
     }
 
