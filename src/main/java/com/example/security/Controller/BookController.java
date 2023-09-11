@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+
 
 import static com.example.security.utils.Constants.*;
 
@@ -45,6 +47,7 @@ public class BookController {
             @RequestParam(value = "sortBy", defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = DEFAULT_SORT_DIRECTION, required = false) String sortDir
     ){
+
         CustomResponse customResponse = bookService.getAllBooks(pageNo, pageSize, sortBy, sortDir);
         return ResponseHandler.generateResponse("Fetch All Data Successfully", HttpStatus.OK,customResponse);
     }
