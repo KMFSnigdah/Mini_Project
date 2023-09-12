@@ -39,7 +39,6 @@ public class BookBorrowService implements IBookBorrow {
 
         // Check if Delete or not already
         if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", bookId);
-
         // Update Book status
         book.setAvailable(false);
         // Save in Database
@@ -69,9 +68,7 @@ public class BookBorrowService implements IBookBorrow {
 
     @Override
     public void returnBook(long bookId, long userId) {
-        // Check is User available or not
         User user = getUserById(userId);
-        // Check is Book exists or not
         Book book = getBookById(bookId);
 
         // Check if Delete or not already
@@ -96,14 +93,13 @@ public class BookBorrowService implements IBookBorrow {
         borrowBookRepository.deleteByBookId(bookId);
 
         // Sending Email This book Reserved User
-       for(int i =0; i<2000 ; i++){
            for (BookReservation reservation : book.getReservation()) {
                User reservedUser = reservation.getUser();
                String emailMessage = "We are exited to inform you that "+ book.getTitle() + " is now available";
                String userEmail = reservedUser.getEmail();
                emailService.sendEmail(userEmail, "Book is Available", emailMessage);
            }
-       }
+
 
     }
 

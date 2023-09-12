@@ -6,7 +6,6 @@ import com.example.security.DTO.response.LogInResponseDTO;
 import com.example.security.DTO.request.RegisterRequestDTO;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IAuthenticationService;
-import com.example.security.service.impl.LogoutService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private IAuthenticationService authenticationService;
-    private LogoutService logoutService;
 
     // For Registration account
     // http://localhost:8080/api/auth/register

@@ -1,13 +1,11 @@
 package com.example.security.security;
 
-import com.example.security.service.impl.LogoutService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +22,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtService jwtService;
     private UserDetailsService userDetailsService;
-    private LogoutService tokenBlacklistService;
 
     @Override
     protected void doFilterInternal(

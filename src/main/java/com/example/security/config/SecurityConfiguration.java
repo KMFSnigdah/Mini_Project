@@ -34,7 +34,6 @@ public class SecurityConfiguration {
                              .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.GET, "/users/{userId}/books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/users/{userId}/borrowed-books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
-
                              .requestMatchers(HttpMethod.POST, "/books/create").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.PUT, "/books/update/{id}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.DELETE, "/books/delete/{id}").hasRole(Constants.ROLE_ADMIN)
@@ -43,16 +42,11 @@ public class SecurityConfiguration {
                              .requestMatchers(HttpMethod.DELETE, "/books/{bookId}/return").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/books/{bookId}/reserve").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/books/{bookId}/cancel-reservation").hasRole(Constants.ROLE_USER)
-
                              .requestMatchers(HttpMethod.POST, "/books/{bookId}/reviews/create").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/books/{bookId}/reviews").hasAnyRole(Constants.ROLE_USER, Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.PUT, "/books/reviews/{reviewId}/update").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.DELETE, "/books/reviews/{reviewId}/delete").hasRole(Constants.ROLE_USER)
-
-                             .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_GET).hasRole(Constants.ROLE_USER)
-                             .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_GET1).hasRole(Constants.ROLE_ADMIN)
-                             .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_USER_PREFIX + "1").hasRole(Constants.ROLE_USER)
-                             .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_ADMIN_PREFIX + "1").hasRole(Constants.ROLE_ADMIN)
+                             .requestMatchers(HttpMethod.DELETE, "/users/{userId}/history").hasAnyRole(Constants.ROLE_USER, Constants.ROLE_ADMIN)
                              .anyRequest().authenticated()
                      )
                      .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

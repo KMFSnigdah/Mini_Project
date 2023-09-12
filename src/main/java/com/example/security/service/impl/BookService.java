@@ -57,7 +57,6 @@ public class BookService implements IBookService {
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());
         book.setAvailable(bookDto.isAvailable());
-
         // Save Entity in database
         Book response = bookRepository.save(book);
         // Convert Entity to DTO and return
@@ -72,14 +71,13 @@ public class BookService implements IBookService {
 
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
+        // Add pagination
         Page<Book> books = bookRepository.findByIsDeletedFalse(pageable);
-
         //get content for page object
         List<Book> listofbooks = books.getContent();
-
+        // Convert Entity to DTO
         List<BookResponseDTO> content =listofbooks.stream().map(this::mapToDto).toList();
-
+        // Set pagination in Generic response
         CustomResponse<BookResponseDTO> response = new CustomResponse<>();
         response.setContent(content);
 
@@ -108,8 +106,6 @@ public class BookService implements IBookService {
         book.setDeleted(true);
         // Save in database
         bookRepository.save(book);
-        // Delete reviews
-       // reviewRepository.deleteReviewsForByBookId(id);
     }
 
     // Convert Entity to DTO

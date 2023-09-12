@@ -85,7 +85,7 @@ public class AuthenticationService implements IAuthenticationService {
                             request.getPassword()
                     )
             );
-
+            // Check is user exists or not
             var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new AuthenticationException(HttpStatus.NOT_FOUND, "User not found"));
 
