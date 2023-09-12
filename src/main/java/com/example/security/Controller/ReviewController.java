@@ -1,6 +1,7 @@
 package com.example.security.Controller;
 
 import com.example.security.DTO.request.ReviewDTO;
+import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IReviewService;
 import com.example.security.service.impl.AuthenticationService;
@@ -21,12 +22,11 @@ public class ReviewController {
         this.reviewService = reviewService;
         this.authenticationService = authenticationService;
     }
-    @PostMapping("/{bookId}/user/{userId}/reviews/create")
+    @PostMapping("/{bookId}/reviews/create")
     public ResponseEntity<Object> createReview(@Valid @PathVariable long bookId,
-                                               @PathVariable long userId,
                                                @RequestBody ReviewDTO reviewDTO){
-
-        ReviewDTO response = reviewService.createReview(bookId, userId, reviewDTO);
+        User user = authenticationService.getAuthenticatedUser();
+        ReviewDTO response = reviewService.createReview(bookId, user.getId(), reviewDTO);
         return ResponseHandler.generateResponse("Review Successfully Created", HttpStatus.CREATED, response);
     }
 
@@ -36,18 +36,18 @@ public class ReviewController {
         return  ResponseHandler.generateResponse("Fetch All Successfully", HttpStatus.OK, reviews);
     }
 
-    @PutMapping("/review/{reviewId}/user/{userId}")
+    @PutMapping("/reviews/{reviewId}/update")
     public ResponseEntity<Object> updateReview(@Valid @PathVariable(value = "reviewId") long reviewId,
-                                                @PathVariable(value = "userId") long userId,
                                                 @RequestBody ReviewDTO reviewDTO){
-        ReviewDTO updatedReview = reviewService.updateReview(reviewId, userId, reviewDTO);
+        User user = authenticationService.getAuthenticatedUser();
+        ReviewDTO updatedReview = reviewService.updateReview(reviewId, user.getId(), reviewDTO);
         return ResponseHandler.generateResponse("Updated Successfully",HttpStatus.OK,updatedReview);
     }
 
-    @DeleteMapping("/review/{reviewId}/user/{userId}")
-    public ResponseEntity<Object> deleteReview(@PathVariable(value = "reviewId") long reviewId,
-                                               @PathVariable(value = "userId") long userId){
-           reviewService.deleteReview(reviewId, userId);
+    @DeleteMapping("/reviews/{reviewId}/delete")
+    public ResponseEntity<Object> deleteReview(@PathVariable(value = "reviewId") long reviewId){
+        User user = authenticationService.getAuthenticatedUser();
+           reviewService.deleteReview(reviewId, user.getId());
         return ResponseHandler.generateResponse("Resource Deleted Successfully", HttpStatus.NO_CONTENT);
     }
 }

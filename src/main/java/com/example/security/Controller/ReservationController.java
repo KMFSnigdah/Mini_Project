@@ -1,5 +1,6 @@
 package com.example.security.Controller;
 
+import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IReservationService;
 import com.example.security.service.impl.AuthenticationService;
@@ -20,17 +21,17 @@ public class ReservationController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/{bookId}/reserve/user/{userId}")
-    public ResponseEntity<Object> reserveBook(@PathVariable long bookId,
-                                              @PathVariable long userId) {
-        reservationService.reserve(userId, bookId);
+    @GetMapping("/{bookId}/reserve")
+    public ResponseEntity<Object> reserveBook(@PathVariable long bookId) {
+        User user = authenticationService.getAuthenticatedUser();
+        reservationService.reserve(user.getId(), bookId);
         return ResponseHandler.generateResponse("Book Reserve Successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/{bookId}/cancel_reservation/user/{userId}")
-    public ResponseEntity<Object> cancelReserveBook(@PathVariable long bookId,
-                                              @PathVariable long userId) {
-        reservationService.cancelReservation(userId, bookId);
+    @GetMapping("/{bookId}/cancel-reservation")
+    public ResponseEntity<Object> cancelReserveBook(@PathVariable long bookId) {
+        User user = authenticationService.getAuthenticatedUser();
+        reservationService.cancelReservation(user.getId(), bookId);
         return ResponseHandler.generateResponse("Book Reserve Cancel Successfully", HttpStatus.OK);
     }
 }

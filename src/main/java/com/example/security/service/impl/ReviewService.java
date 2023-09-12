@@ -120,6 +120,9 @@ public class ReviewService implements IReviewService {
         if (review.getUser().getId() != user.getId()) {
             throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);
         }
+        // Check if Delete or not already
+        if (review.getBook().isDeleted())
+            throw new ResourceNotFoundException("Book", "id", review.getBook().getId());
         // Update the book's average rating
         reviewRepository.delete(review);
         updateBookAverageRating(review.getBook());

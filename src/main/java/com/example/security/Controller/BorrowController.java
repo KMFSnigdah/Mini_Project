@@ -2,6 +2,7 @@ package com.example.security.Controller;
 
 import com.example.security.DTO.request.CreateBorrowDTO;
 import com.example.security.DTO.response.ResponseBorrowDTO;
+import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IBookBorrow;
 import com.example.security.service.impl.AuthenticationService;
@@ -22,16 +23,17 @@ public class BorrowController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/users/{userId}/books/{bookId}/borrow")
-    public ResponseEntity<Object> borrowBook(@PathVariable("userId") long userId,
-                                             @PathVariable("bookId") long bookId,
+    @PostMapping("/{bookId}/borrow")
+    public ResponseEntity<Object> borrowBook(@PathVariable("bookId") long bookId,
                                              @Valid @RequestBody CreateBorrowDTO requestDto) {
-        ResponseBorrowDTO response = bookBorrow.borrowBook(userId, bookId, requestDto);
+        User user = authenticationService.getAuthenticatedUser();
+        ResponseBorrowDTO response = bookBorrow.borrowBook(user.getId(), bookId, requestDto);
         return ResponseHandler.generateResponse("Borrowed This Book Successfully", HttpStatus.OK, response);
     }
     @DeleteMapping("/{bookId}/return")
     public ResponseEntity<Object> returnBook(@PathVariable long bookId){
-        bookBorrow.returnBook(bookId);
+        User user = authenticationService.getAuthenticatedUser();
+        bookBorrow.returnBook(bookId, user.getId());
         return ResponseHandler.generateResponse("Returned This Book Successfully", HttpStatus.OK);
     }
 

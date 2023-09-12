@@ -35,6 +35,16 @@ public class SecurityConfiguration {
                              .requestMatchers(HttpMethod.PUT, "/books/update/{id}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.DELETE, "/books/delete/{id}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.GET, "/books/getAll").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.POST, "/books/{bookId}/borrow").hasRole(Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.DELETE, "/books/{bookId}/return").hasRole(Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.GET, "/books/{bookId}/reserve").hasRole(Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.GET, "/books/{bookId}/cancel-reservation").hasRole(Constants.ROLE_USER)
+
+                             .requestMatchers(HttpMethod.POST, "/books/{bookId}/reviews/create").hasRole(Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.GET, "/books/{bookId}/reviews").hasAnyRole(Constants.ROLE_USER, Constants.ROLE_ADMIN)
+                             .requestMatchers(HttpMethod.PUT, "/books/reviews/{reviewId}/update").hasRole(Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.DELETE, "/books/reviews/{reviewId}/delete").hasRole(Constants.ROLE_USER)
+
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_GET).hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_GET1).hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_USER_PREFIX + "1").hasRole(Constants.ROLE_USER)

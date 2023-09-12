@@ -4,6 +4,7 @@ import com.example.security.DTO.request.CreateBookDTO;
 import com.example.security.DTO.request.UpdateBookDTO;
 import com.example.security.DTO.response.BookResponseDTO;
 import com.example.security.entity.Book;
+import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.BookRepository;
 import com.example.security.repository.ReviewRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -100,12 +102,14 @@ public class BookService implements IBookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
         // Check if Delete or not already
         if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", id);
+        // Check is borrow or not
+        if(!book.isAvailable()) throw new CustomeException(HttpStatus.BAD_REQUEST, "You can't delete a borrowed book");
         // Set delete true
         book.setDeleted(true);
         // Save in database
         bookRepository.save(book);
         // Delete reviews
-        reviewRepository.deleteReviewsForByBookId(id);
+       // reviewRepository.deleteReviewsForByBookId(id);
     }
 
     // Convert Entity to DTO
