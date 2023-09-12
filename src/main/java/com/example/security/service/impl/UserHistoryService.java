@@ -1,7 +1,6 @@
 package com.example.security.service.impl;
 
 import com.example.security.DTO.response.HistoryResponseDTO;
-import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.entity.Role;
 import com.example.security.entity.User;
 import com.example.security.entity.UserHistory;
@@ -9,14 +8,14 @@ import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.UserHistoryRepository;
 import com.example.security.repository.UserRepository;
-import com.example.security.service.IUserHistory;
+import com.example.security.service.IUserHistoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserHistoryService implements IUserHistory {
+public class UserHistoryService implements IUserHistoryService {
 
     private final UserHistoryRepository userHistoryRepository;
     private final UserRepository userRepository;

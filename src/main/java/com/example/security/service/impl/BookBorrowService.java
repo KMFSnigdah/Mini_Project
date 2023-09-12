@@ -7,26 +7,28 @@ import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.*;
 import com.example.security.service.IBookBorrow;
+import com.example.security.service.emailService.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
-public class BookBorrow implements IBookBorrow {
+public class BookBorrowService implements IBookBorrow {
    private final BorrowBookRepository borrowBookRepository;
    private final UserRepository userRepository;
    private final BookRepository bookRepository;
    private final UserHistoryRepository userHistoryRepository;
-
    private final ReservationRepository reservationRepository;
+   private final EmailService emailService;
 
-    public BookBorrow(BorrowBookRepository borrowBookRepository, UserRepository userRepository, BookRepository bookRepository, UserHistoryRepository userHistoryRepository, ReservationRepository reservationRepository) {
+    public BookBorrowService(BorrowBookRepository borrowBookRepository, UserRepository userRepository, BookRepository bookRepository, UserHistoryRepository userHistoryRepository, ReservationRepository reservationRepository, EmailService emailService) {
         this.borrowBookRepository = borrowBookRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.userHistoryRepository = userHistoryRepository;
         this.reservationRepository = reservationRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -92,6 +94,17 @@ public class BookBorrow implements IBookBorrow {
         userHistoryRepository.save(history);
 
         borrowBookRepository.deleteByBookId(bookId);
+
+        // Sending Email This book Reserved User
+       for(int i =0; i<2000 ; i++){
+           for (BookReservation reservation : book.getReservation()) {
+               User reservedUser = reservation.getUser();
+               String emailMessage = "We are exited to inform you that "+ book.getTitle() + " is now available";
+               String userEmail = reservedUser.getEmail();
+               emailService.sendEmail(userEmail, "Book is Available", emailMessage);
+           }
+       }
+
     }
 
     private User getUserById(long userId) {

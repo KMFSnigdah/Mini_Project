@@ -1,10 +1,9 @@
 package com.example.security.Controller;
 
 import com.example.security.DTO.response.HistoryResponseDTO;
-import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
-import com.example.security.service.IUserHistory;
+import com.example.security.service.IUserHistoryService;
 import com.example.security.service.IUserService;
 import com.example.security.service.impl.AuthenticationService;
 import org.springframework.http.HttpStatus;
@@ -19,10 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 public class UserHistoryController {
-    private final IUserHistory userHistoryService;
+    private final IUserHistoryService userHistoryService;
     private final IUserService userService;
     private final AuthenticationService authenticationService;
-    public UserHistoryController(IUserHistory userHistoryService, IUserService userService, AuthenticationService authenticationService) {
+    public UserHistoryController(IUserHistoryService userHistoryService, IUserService userService, AuthenticationService authenticationService) {
         this.userHistoryService = userHistoryService;
         this.userService = userService;
         this.authenticationService = authenticationService;

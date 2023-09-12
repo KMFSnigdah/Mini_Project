@@ -1,9 +1,9 @@
 package com.example.security.service.impl;
 
-import com.example.security.DTO.request.LogInRequestDto;
+import com.example.security.DTO.request.LogInRequestDTO;
 import com.example.security.DTO.response.AuthenticationResponseDTO;
 import com.example.security.DTO.response.LogInResponseDTO;
-import com.example.security.DTO.request.RegisterRequest;
+import com.example.security.DTO.request.RegisterRequestDTO;
 import com.example.security.security.JwtService;
 import com.example.security.exception.AuthenticationException;
 import com.example.security.service.IAuthenticationService;
@@ -32,7 +32,7 @@ public class AuthenticationService implements IAuthenticationService {
     private AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponseDTO register(RegisterRequest request) {
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         // Check if the email already exists in the database
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new AuthenticationException(HttpStatus.BAD_REQUEST, "Email address is already taken.");
@@ -77,7 +77,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .build();
     }
 
-    public LogInResponseDTO authenticate(LogInRequestDto request) {
+    public LogInResponseDTO authenticate(LogInRequestDTO request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

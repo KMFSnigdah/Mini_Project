@@ -1,9 +1,9 @@
 package com.example.security.Controller;
 
-import com.example.security.DTO.request.LogInRequestDto;
+import com.example.security.DTO.request.LogInRequestDTO;
 import com.example.security.DTO.response.AuthenticationResponseDTO;
 import com.example.security.DTO.response.LogInResponseDTO;
-import com.example.security.DTO.request.RegisterRequest;
+import com.example.security.DTO.request.RegisterRequestDTO;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IAuthenticationService;
 import com.example.security.service.impl.LogoutService;
@@ -27,7 +27,7 @@ public class AuthenticationController {
     // For Registration account
     // http://localhost:8080/api/auth/register
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request){
+    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequestDTO request){
         AuthenticationResponseDTO responseDTO = authenticationService.register(request);
         return ResponseHandler.generateResponse("Account Create SuccessFully", HttpStatus.CREATED,responseDTO);
     }
@@ -35,7 +35,7 @@ public class AuthenticationController {
     // For Login account
     // http://localhost:8080/api/v1/auth/login
     @PostMapping("/authenticate")
-    public ResponseEntity<Object> authenticate(@Valid @RequestBody LogInRequestDto request){
+    public ResponseEntity<Object> authenticate(@Valid @RequestBody LogInRequestDTO request){
         LogInResponseDTO response = authenticationService.authenticate(request);
         return ResponseHandler.generateResponse("Login account Successfully", HttpStatus.OK,response);
     }

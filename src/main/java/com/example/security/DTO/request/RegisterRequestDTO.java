@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterRequestDTO {
     @NotEmpty
     @Size(min = 2, message = "First name should have at least 2 character")
     private String firstname;

@@ -9,6 +9,7 @@ import com.example.security.repository.BookRepository;
 import com.example.security.repository.ReservationRepository;
 import com.example.security.repository.UserRepository;
 import com.example.security.service.IReservationService;
+import com.example.security.service.emailService.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ public class ReservationService implements IReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final EmailService emailService;
 
-    public ReservationService(ReservationRepository reservationRepository, UserRepository userRepository, BookRepository bookRepository) {
+    public ReservationService(ReservationRepository reservationRepository, UserRepository userRepository, BookRepository bookRepository, EmailService emailService) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.emailService = emailService;
     }
 
     @Override
