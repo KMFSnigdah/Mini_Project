@@ -3,14 +3,17 @@ package com.example.security.service.impl;
 import com.example.security.DTO.response.ResponseBook;
 import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.entity.BorrowBook;
+import com.example.security.entity.Role;
 import com.example.security.entity.User;
 import com.example.security.entity.UserHistory;
+import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
 import com.example.security.repository.BorrowBookRepository;
 import com.example.security.repository.UserHistoryRepository;
 import com.example.security.repository.UserRepository;
 import com.example.security.service.IUserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,11 +41,18 @@ public class UserService implements IUserService {
                 () -> new ResourceNotFoundException("User", "id", userId));
 
         // Map the User entity to a UserResponseDTO
-        return modelMapper.map(user, UserResponseDTO.class);
+        UserResponseDTO response = modelMapper.map(user, UserResponseDTO.class);
+        response.setId(user.getId());
+
+        return response;
     }
 
     @Override
-    public List<ResponseBook> getListofBorrowedBook(long userId) {
+    public Set<ResponseBook> getListofBorrowedBook(User authUser, long userId) {
+        // Check if authUser has the "user" role
+        if (authUser.getRole() == Role.USER && authUser.getId() != userId) {
+            throw new CustomeException(HttpStatus.FORBIDDEN, "User can't able to other people Information Access denied");
+        }
         // Check is User available or not
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", userId));
@@ -51,7 +61,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<ResponseBook> getListCurrentlyBorrowBookByUserId(long userId) {
+    public List<ResponseBook> getListCurrentlyBorrowBookByUserId(User authUser, long userId) {
+        // Check if authUser has the "user" role
+        if (authUser.getRole() == Role.USER && authUser.getId() != userId) {
+            throw new CustomeException(HttpStatus.FORBIDDEN, "User can't able to other people Information Access denied");
+        }
         // Check is User available or not
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", userId));
@@ -70,10 +84,10 @@ public class UserService implements IUserService {
         return responseBook;
     }
 
-    private List<ResponseBook> mapUserHistoryToResponseBooks(Set<UserHistory> userHistory) {
+    private Set<ResponseBook> mapUserHistoryToResponseBooks(Set<UserHistory> userHistory) {
         return userHistory.stream()
                 .map(this::mapUserHistoryToResponseBook)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private ResponseBook mapUserHistoryToResponseBook(UserHistory userHistory) {

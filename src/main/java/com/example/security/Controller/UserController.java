@@ -2,6 +2,7 @@ package com.example.security.Controller;
 
 import com.example.security.DTO.response.ResponseBook;
 import com.example.security.DTO.response.UserResponseDTO;
+import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IUserService;
 import com.example.security.service.impl.AuthenticationService;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/users")
 public class UserController {
 
     private final IUserService userService;
@@ -26,21 +28,23 @@ public class UserController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<Object> getReviewsByBookId(@PathVariable(value = "userId") long userId){
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object> getUserByUserId(@PathVariable(value = "userId") long userId){
         UserResponseDTO response = userService.getUserById(userId);
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
     }
 
-    @GetMapping("/users/{userId}/books")
+    @GetMapping("/{userId}/books")
     public ResponseEntity<Object> getBooksByUserId(@PathVariable(value = "userId") long userId){
-        List<ResponseBook> response = userService.getListofBorrowedBook(userId);
+        User user = authenticationService.getAuthenticatedUser();
+        Set<ResponseBook> response = userService.getListofBorrowedBook(user, userId);
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
     }
 
-    @GetMapping("/users/{userId}/borrowed-books")
+    @GetMapping("/{userId}/borrowed-books")
     public ResponseEntity<Object> getCurrentlyBorrowBooksByUserId(@PathVariable(value = "userId") long userId){
-        List<ResponseBook> response = userService.getListCurrentlyBorrowBookByUserId(userId);
+        User user = authenticationService.getAuthenticatedUser();
+        List<ResponseBook> response = userService.getListCurrentlyBorrowBookByUserId(user,userId);
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
     }
 }

@@ -61,13 +61,13 @@ public class AuthenticationService implements IAuthenticationService {
                 .build();
 
         // Save the user to the database
-        userRepository.save(user);
+       User newUser = userRepository.save(user);
 
         // Generate JWT token and return the response
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponseDTO.builder()
-                .userId(userID)
+                .userId(newUser.getId())
                 .email(user.getEmail())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())

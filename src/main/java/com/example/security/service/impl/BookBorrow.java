@@ -5,10 +5,7 @@ import com.example.security.DTO.response.ResponseBorrowDTO;
 import com.example.security.entity.*;
 import com.example.security.exception.CustomeException;
 import com.example.security.exception.ResourceNotFoundException;
-import com.example.security.repository.BookRepository;
-import com.example.security.repository.BorrowBookRepository;
-import com.example.security.repository.UserHistoryRepository;
-import com.example.security.repository.UserRepository;
+import com.example.security.repository.*;
 import com.example.security.service.IBookBorrow;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,11 +19,14 @@ public class BookBorrow implements IBookBorrow {
    private final BookRepository bookRepository;
    private final UserHistoryRepository userHistoryRepository;
 
-    public BookBorrow(BorrowBookRepository borrowBookRepository, UserRepository userRepository, BookRepository bookRepository, UserHistoryRepository userHistoryRepository) {
+   private final ReservationRepository reservationRepository;
+
+    public BookBorrow(BorrowBookRepository borrowBookRepository, UserRepository userRepository, BookRepository bookRepository, UserHistoryRepository userHistoryRepository, ReservationRepository reservationRepository) {
         this.borrowBookRepository = borrowBookRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.userHistoryRepository = userHistoryRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -51,6 +51,10 @@ public class BookBorrow implements IBookBorrow {
         history.setUser(user);
         history.setBook(book);
         userHistoryRepository.save(history);
+
+        // Cancel reservation if user reserve
+        reservationRepository.findByBookIdAndUserId(book.getId(), user.getId()).ifPresent(
+                reservationRepository::delete);
 
         // Map entity to DTO
         return new ResponseBorrowDTO(

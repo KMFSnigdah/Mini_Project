@@ -1,6 +1,8 @@
 package com.example.security.service.impl;
 
 import com.example.security.DTO.response.HistoryResponseDTO;
+import com.example.security.DTO.response.UserResponseDTO;
+import com.example.security.entity.Role;
 import com.example.security.entity.User;
 import com.example.security.entity.UserHistory;
 import com.example.security.exception.CustomeException;
@@ -25,7 +27,11 @@ public class UserHistoryService implements IUserHistory {
     }
 
     @Override
-    public List<HistoryResponseDTO> getHistoryByUserId(long userId) {
+    public List<HistoryResponseDTO> getHistoryByUserId(User authUser, long userId) {
+        // Check if authUser has the "user" role and if authUser.id is not equal to userId
+        if (authUser.getRole() == Role.USER && authUser.getId() != userId) {
+            throw new CustomeException(HttpStatus.FORBIDDEN, "User can't able to others information. Access denied");
+        }
         // Check if the user exists, or throw a ResourceNotFoundException
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", userId));

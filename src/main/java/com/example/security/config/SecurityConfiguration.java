@@ -31,6 +31,10 @@ public class SecurityConfiguration {
                      .csrf(csrf -> csrf.disable())
                      .authorizeHttpRequests(auth -> auth
                              .requestMatchers(Constants.API_AUTH).permitAll()
+                             .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole(Constants.ROLE_ADMIN)
+                             .requestMatchers(HttpMethod.GET, "/users/{userId}/books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.GET, "/users/{userId}/borrowed-books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
+
                              .requestMatchers(HttpMethod.POST, "/books/create").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.PUT, "/books/update/{id}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.DELETE, "/books/delete/{id}").hasRole(Constants.ROLE_ADMIN)
@@ -49,8 +53,7 @@ public class SecurityConfiguration {
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_GET1).hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_USER_PREFIX + "1").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, Constants.API_STUDENT_ADMIN_PREFIX + "1").hasRole(Constants.ROLE_ADMIN)
-                             //.anyRequest().authenticated()
-                             .anyRequest().permitAll()
+                             .anyRequest().authenticated()
                      )
                      .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                      .authenticationProvider(authenticationProvider)

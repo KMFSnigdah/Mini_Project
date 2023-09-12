@@ -34,6 +34,10 @@ public class ReservationService implements IReservationService {
 
         // Check reservation and availability, throw exceptions if conditions not met
         checkReservationAndAvailability(userId, bookId, book);
+        // Check if user already borrowed this book
+        if(book.getBookBorrowing().getUser().getId() == userId){
+            throw new CustomeException(HttpStatus.CONFLICT, "You have already borrowed this book");
+        }
         // Create a new reservation and save it in the database
         BookReservation reservation = createReservation(book, user);
         reservationRepository.save(reservation);
