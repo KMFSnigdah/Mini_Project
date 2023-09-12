@@ -1,6 +1,7 @@
 package com.example.security.DTO.request;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,6 @@ public class UpdateBookDTO {
     @Size(min = 2, message = "Description should have at least 2 character")
     private String description;
 
-    @NotEmpty
+    @NotNull
     private boolean isAvailable;
 }

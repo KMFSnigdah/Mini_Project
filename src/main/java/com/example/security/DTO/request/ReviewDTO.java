@@ -1,8 +1,6 @@
 package com.example.security.DTO.request;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +14,8 @@ public class ReviewDTO {
 
     private Long id;
 
-    @NotEmpty(message = "Ratting can't be empty")
-    @Min(value = 0) // Minimum value allowed (0.0)
-    @Max(value = 5) // Maximum value allowed (5.0)
+    @DecimalMin(value = "0.1", inclusive = true)
+    @DecimalMax(value = "9.9", inclusive = true)
     private BigDecimal rating;
 
     @NotEmpty(message = "Review can't be empty")

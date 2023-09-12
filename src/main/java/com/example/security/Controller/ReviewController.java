@@ -23,8 +23,8 @@ public class ReviewController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/{bookId}/reviews/create")
-    public ResponseEntity<Object> createReview(@Valid @PathVariable long bookId,
-                                               @RequestBody ReviewDTO reviewDTO){
+    public ResponseEntity<Object> createReview(@PathVariable long bookId,
+                                               @Valid @RequestBody ReviewDTO reviewDTO){
         User user = authenticationService.getAuthenticatedUser();
         ReviewDTO response = reviewService.createReview(bookId, user.getId(), reviewDTO);
         return ResponseHandler.generateResponse("Review Successfully Created", HttpStatus.CREATED, response);
@@ -37,8 +37,8 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{reviewId}/update")
-    public ResponseEntity<Object> updateReview(@Valid @PathVariable(value = "reviewId") long reviewId,
-                                                @RequestBody ReviewDTO reviewDTO){
+    public ResponseEntity<Object> updateReview(@PathVariable(value = "reviewId") long reviewId,
+                                                @Valid @RequestBody ReviewDTO reviewDTO){
         User user = authenticationService.getAuthenticatedUser();
         ReviewDTO updatedReview = reviewService.updateReview(reviewId, user.getId(), reviewDTO);
         return ResponseHandler.generateResponse("Updated Successfully",HttpStatus.OK,updatedReview);
