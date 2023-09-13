@@ -12,25 +12,24 @@ public class Constants {
 
     // API Paths
     public static final String API_AUTH = "/api/v1/auth/**";
-    public static final String API_STUDENT_GET = "/api/v1/student/get";
-    public static final String API_STUDENT_GET1 = "/api/v1/student/get1";
-    public static final String API_STUDENT_USER_PREFIX = "/api/v1/student/user-api-";
-    public static final String API_STUDENT_ADMIN_PREFIX = "/api/v1/student/admin-api-";
-    public static final String USER_PROFILE_PATH = "/users/{userId}";
-    public static final String USER_BOOKS_PATH = "/users/{userId}/books";
-    public static final String USER_BORROWED_BOOKS_PATH = "/users/{userId}/borrowed-books";
-    public static final String CREATE_BOOK_PATH = "/books/create";
-    public static final String UPDATE_BOOK_PATH = "/books/update/{id}";
-    public static final String DELETE_BOOK_PATH = "/books/delete/{id}";
-    public static final String GET_ALL_BOOKS_PATH = "/books/getAll";
-    public static final String BORROW_BOOK_PATH = "/books/{bookId}/borrow";
-    public static final String RETURN_BOOK_PATH = "/books/{bookId}/return";
-    public static final String RESERVE_BOOK_PATH = "/books/{bookId}/reserve";
-    public static final String CANCEL_RESERVATION_PATH = "/books/{bookId}/cancel-reservation";
-    public static final String CREATE_REVIEW_PATH = "/books/{bookId}/reviews/create";
-    public static final String GET_BOOK_REVIEWS_PATH = "/books/{bookId}/reviews";
-    public static final String UPDATE_REVIEW_PATH = "/books/reviews/{reviewId}/update";
-    public static final String DELETE_REVIEW_PATH = "/books/reviews/{reviewId}/delete";
+    public static final String SIGN_IN = "/user/login";
+    public static final String SIGN_UP = "/user/register";
+    public static final String USER_DETAILS = "users/{userId}";
+    public static final String USER_OWNED_BOOK = "users/{userId}/books";
+    public static final String USER_BORROWED_BOOK = "users/{userId}/borrowed-books";
+    public static final String CREATE_BOOK = "books/create";
+    public static final String UPDATE_BOOK = "books/update/{id}";
+    public static final String DELETE_BOOK = "books/delete/{id}";
+    public static final String GET_BOOK = "books/all";
+    public static final String BORROW_BOOK = "books/{bookId}/borrow";
+    public static final String RETURN_BOOK = "books/{bookId}/return";
+    public static final String RESERVE_BOOK = "books/{bookId}/reserve";
+    public static final String CANCEL_RESERVATION = "books/{bookId}/cancel";
+    public static final String GIVE_REVIEW = "books/{bookId}/reviews/create";
+    public static final String UPDATE_REVIEW = "books/reviews/{reviewId}/update";
+    public static final String DELETE_REVIEW = "books/reviews/{reviewId}/delete";
+    public static final String GET_REVIEW = "books/{bookId}/reviews";
+    public static final String GET_USER_HISTORY = "users/{userId}/history";
 
 
     // Roles

@@ -3,7 +3,6 @@ package com.example.security.config;
 import com.example.security.security.JwtAuthenticationFilter;
 import com.example.security.utils.Constants;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,7 +29,7 @@ public class SecurityConfiguration {
              http
                      .csrf(csrf -> csrf.disable())
                      .authorizeHttpRequests(auth -> auth
-                             .requestMatchers(Constants.API_AUTH).permitAll()
+                             .requestMatchers(HttpMethod.POST, Constants.SIGN_IN, Constants.SIGN_UP).permitAll()
                              .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.GET, "/users/{userId}/books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/users/{userId}/borrowed-books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
@@ -48,6 +47,7 @@ public class SecurityConfiguration {
                              .requestMatchers(HttpMethod.DELETE, "/books/reviews/{reviewId}/delete").hasRole(Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.DELETE, "/users/{userId}/history").hasAnyRole(Constants.ROLE_USER, Constants.ROLE_ADMIN)
                              .anyRequest().authenticated()
+          
                      )
                      .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                      .authenticationProvider(authenticationProvider)

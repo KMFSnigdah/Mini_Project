@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/user")
 @AllArgsConstructor
 public class AuthenticationController {
 
     private IAuthenticationService authenticationService;
 
     // For Registration account
-    // http://localhost:8080/api/auth/register
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequestDTO request){
         AuthenticationResponseDTO responseDTO = authenticationService.register(request);
@@ -31,8 +30,7 @@ public class AuthenticationController {
     }
 
     // For Login account
-    // http://localhost:8080/api/v1/auth/login
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<Object> authenticate(@Valid @RequestBody LogInRequestDTO request){
         LogInResponseDTO response = authenticationService.authenticate(request);
         return ResponseHandler.generateResponse("Login account Successfully", HttpStatus.OK,response);

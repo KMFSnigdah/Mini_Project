@@ -42,8 +42,8 @@ public class BookController {
     }
 
     // http://localhost:8080/books/getAll?pageNo=1&pageSize=10&sortBy=title&sortDir=asc
-    @GetMapping("/getAll")
-    public ResponseEntity<Object> getAllPosts(
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllBooks(
             @RequestParam(value = "pageNo", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,

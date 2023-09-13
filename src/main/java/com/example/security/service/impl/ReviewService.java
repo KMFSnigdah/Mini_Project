@@ -86,7 +86,7 @@ public class ReviewService implements IReviewService {
             throw new ResourceNotFoundException("Book", "id", review.getBook().getId());
 
         if (review.getUser().getId() != user.getId()) {
-            throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);
+            throw new CustomeException(HttpStatus.BAD_REQUEST, "You are not allowed to update another user review");
         }
 
         //Update Comment
@@ -110,7 +110,7 @@ public class ReviewService implements IReviewService {
                 () -> new ResourceNotFoundException("Review", "id", reviewId));
 
         if (review.getUser().getId() != user.getId()) {
-            throw new ResourceNotFoundException("dfdfdfdsfdfsd", "id", reviewId);
+            throw new CustomeException(HttpStatus.BAD_REQUEST, "You are not allowed to update another user review");
         }
         // Check if Delete or not already
         if (review.getBook().isDeleted())
