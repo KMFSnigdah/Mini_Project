@@ -3,10 +3,12 @@ package com.example.security.service;
 import com.example.security.DTO.request.CreateBookDTO;
 import com.example.security.DTO.request.UpdateBookDTO;
 import com.example.security.DTO.response.BookResponseDTO;
+import com.example.security.entity.Book;
 import com.example.security.response.CustomResponse;
 
 public interface IBookService {
     BookResponseDTO createBook(CreateBookDTO book);
+    BookResponseDTO getBookById(long id);
     BookResponseDTO updateBook(long bookId, UpdateBookDTO book);
     CustomResponse getAllBooks(int pageNo, int pageSize, String sortBy, String sortDir);
     void deleteBook(long id);

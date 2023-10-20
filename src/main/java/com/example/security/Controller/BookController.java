@@ -3,6 +3,7 @@ package com.example.security.Controller;
 import com.example.security.DTO.request.CreateBookDTO;
 import com.example.security.DTO.request.UpdateBookDTO;
 import com.example.security.DTO.response.BookResponseDTO;
+import com.example.security.entity.Book;
 import com.example.security.response.CustomResponse;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IBookService;
@@ -32,6 +33,12 @@ public class BookController {
     public ResponseEntity<Object> createBook(@Valid @RequestBody CreateBookDTO bookRequestDTO) {
         BookResponseDTO response = bookService.createBook(bookRequestDTO);
         return ResponseHandler.generateResponse("Create Book Successfully", HttpStatus.CREATED, response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getBookById(@PathVariable long id){
+        BookResponseDTO responseDTO = bookService.getBookById(id);
+        return ResponseHandler.generateResponse("Fetch Book Successfully", HttpStatus.OK, responseDTO);
     }
 
     @PutMapping("/update/{id}")

@@ -24,6 +24,6 @@ public class UpdateBookDTO {
     @Size(min = 2, message = "Description should have at least 2 character")
     private String description;
 
-    @NotNull
-    private boolean isAvailable;
+    @NotEmpty
+    private String imageUrl;
 }

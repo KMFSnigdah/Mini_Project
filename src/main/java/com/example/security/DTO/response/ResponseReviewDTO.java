@@ -1,6 +1,7 @@
 package com.example.security.DTO.response;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,15 +11,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class BookResponseDTO {
-    private long id;
-    private String title;
-    private String author;
-    private String description;
-    private boolean isAvailable;
+public class ResponseReviewDTO {
+    private Long id;
+    private String userName;
     private BigDecimal rating;
-    private String imageUrl;
+    private String review;
 }

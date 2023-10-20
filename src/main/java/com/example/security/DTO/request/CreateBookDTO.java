@@ -22,4 +22,7 @@ public class CreateBookDTO {
     @NotEmpty
     @Size(min = 2, message = "Description should have at least 2 character")
     private String description;
+
+    @NotEmpty
+    private String imageUrl;
 }

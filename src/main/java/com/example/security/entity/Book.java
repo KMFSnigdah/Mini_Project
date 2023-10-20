@@ -38,6 +38,9 @@ public class Book {
     @Column(name = "rating")
     private BigDecimal rating = BigDecimal.ZERO;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookReview> reviews = new HashSet<>();
 

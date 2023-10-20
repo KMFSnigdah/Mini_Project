@@ -1,6 +1,7 @@
 package com.example.security.service.impl;
 
 import com.example.security.DTO.request.ReviewDTO;
+import com.example.security.DTO.response.ResponseReviewDTO;
 import com.example.security.entity.Book;
 import com.example.security.entity.BookReview;
 import com.example.security.entity.User;
@@ -63,7 +64,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTO> getReviewByBookId(long bookId) {
+    public List<ResponseReviewDTO> getReviewByBookId(long bookId) {
         // Check is book available or not
         Book book = getBookById(bookId);
         // Check if Delete or not already
@@ -71,7 +72,17 @@ public class ReviewService implements IReviewService {
         // Retrieve All Reviews by Book ID
         List<BookReview> bookReviews = reviewRepository.findByBookId(bookId);
         // Map Reviews to DTO & Return
-        return bookReviews.stream().map(review -> mapper.map(review, ReviewDTO.class)).collect(Collectors.toList());
+        return bookReviews.stream().map(this::mapToReviewResponse).toList();
+    }
+
+    private ResponseReviewDTO mapToReviewResponse(BookReview review) {
+        return ResponseReviewDTO
+                .builder()
+                .id(review.getId())
+                .userName(review.getUser().getFirstName())
+                .rating(review.getRating())
+                .review(review.getReview())
+                .build();
     }
 
     @Override

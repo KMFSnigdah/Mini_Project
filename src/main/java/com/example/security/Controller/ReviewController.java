@@ -1,6 +1,7 @@
 package com.example.security.Controller;
 
 import com.example.security.DTO.request.ReviewDTO;
+import com.example.security.DTO.response.ResponseReviewDTO;
 import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
 import com.example.security.service.IReviewService;
@@ -32,7 +33,7 @@ public class ReviewController {
 
     @GetMapping("/{bookId}/reviews")
     public ResponseEntity<Object> getReviewsByBookId(@PathVariable(value = "bookId") long bookId){
-        List<ReviewDTO> reviews = reviewService.getReviewByBookId(bookId);
+        List<ResponseReviewDTO> reviews = reviewService.getReviewByBookId(bookId);
         return  ResponseHandler.generateResponse("Fetch All Successfully", HttpStatus.OK, reviews);
     }
 

@@ -45,6 +45,26 @@ public class BookService implements IBookService {
         return mapper.map(book, BookResponseDTO.class);
     }
 
+    public BookResponseDTO getBookById(long id){
+        // Check is book available or not
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Book", "id", id));
+
+        // Check if Delete or not already
+        if (book.isDeleted()) throw new ResourceNotFoundException("Book", "id", id);
+
+        return BookResponseDTO
+                .builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .isAvailable(book.isAvailable())
+                .rating(book.getRating())
+                .imageUrl(book.getImageUrl())
+                .build();
+    }
+
     @Override
     public BookResponseDTO updateBook(long id, UpdateBookDTO bookDto) {
         // Check is book available or not
@@ -56,7 +76,7 @@ public class BookService implements IBookService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());
-        book.setAvailable(bookDto.isAvailable());
+        book.setImageUrl(bookDto.getImageUrl());
         // Save Entity in database
         Book response = bookRepository.save(book);
         // Convert Entity to DTO and return

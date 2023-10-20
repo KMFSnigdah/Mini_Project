@@ -92,6 +92,7 @@ public class AuthenticationService implements IAuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             return LogInResponseDTO.builder()
                     .email(user.getEmail())
+                    .role(user.getRole().toString())
                     .token(jwtToken)
                     .build();
         } catch (BadCredentialsException e) {
