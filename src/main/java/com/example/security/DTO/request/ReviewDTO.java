@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewDTO {
-
-    private Long id;
+    
 
     @DecimalMin(value = "0.1", inclusive = true)
     @DecimalMax(value = "9.9", inclusive = true)
@@ -20,6 +19,4 @@ public class ReviewDTO {
 
     @NotEmpty(message = "Review can't be empty")
     private String review;
-
-
 }
