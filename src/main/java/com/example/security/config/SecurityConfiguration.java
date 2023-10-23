@@ -35,9 +35,10 @@ public class SecurityConfiguration {
                      .csrf(csrf -> csrf.disable())
                      .authorizeHttpRequests(auth -> auth
                              .requestMatchers(HttpMethod.POST, Constants.SIGN_IN, Constants.SIGN_UP).permitAll()
-                             .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole(Constants.ROLE_ADMIN)
+                             .requestMatchers(HttpMethod.GET, "/users/all").hasRole(Constants.ROLE_ADMIN)
+                             .requestMatchers(HttpMethod.GET, "/users/{userId}").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.GET, "/users/{userId}/books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
-                             .requestMatchers(HttpMethod.GET, "/users/{userId}/borrowed-books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
+                             .requestMatchers(HttpMethod.GET, "/users/borrowed-books").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_USER)
                              .requestMatchers(HttpMethod.POST, "/books/create").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.PUT, "/books/update/{id}").hasRole(Constants.ROLE_ADMIN)
                              .requestMatchers(HttpMethod.DELETE, "/books/delete/{id}").hasRole(Constants.ROLE_ADMIN)

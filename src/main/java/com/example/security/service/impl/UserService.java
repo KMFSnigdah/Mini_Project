@@ -1,6 +1,7 @@
 package com.example.security.service.impl;
 
 import com.example.security.DTO.response.ResponseBook;
+import com.example.security.DTO.response.UserAllInfoDto;
 import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.entity.BorrowBook;
 import com.example.security.entity.Role;
@@ -30,6 +31,13 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
 
+    }
+
+    public List<UserAllInfoDto> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserAllInfoDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,6 +87,9 @@ public class UserService implements IUserService {
     private ResponseBook mapCUrrentBorrowToResponseBook(BorrowBook userHistory) {
         ResponseBook responseBook = new ResponseBook();
         responseBook.setBookTitle(userHistory.getBook().getTitle());
+        responseBook.setAuthor(userHistory.getBook().getAuthor());
+        responseBook.setBorrowDate(userHistory.getBorrowedDate());
+        responseBook.setDueDate(userHistory.getDueDate());
         return responseBook;
     }
 

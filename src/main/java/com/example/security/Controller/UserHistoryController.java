@@ -26,8 +26,15 @@ public class UserHistoryController {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
+    @GetMapping("/history")
+    public ResponseEntity<Object> getHistoryByUserId() {
+        User user = authenticationService.getAuthenticatedUser();
+        List<HistoryResponseDTO> response = userHistoryService.getHistoryByUserId(user, user.getId());
+        return ResponseHandler.generateResponse("Fetch History Successfully", HttpStatus.OK, response);
+    }
+
     @GetMapping("/{userId}/history")
-    public ResponseEntity<Object> getHistoryByUserId(@PathVariable long userId) {
+    public ResponseEntity<Object> getHistoryByUserIdAdmin(@PathVariable long userId) {
         User user = authenticationService.getAuthenticatedUser();
         List<HistoryResponseDTO> response = userHistoryService.getHistoryByUserId(user, userId);
         return ResponseHandler.generateResponse("Fetch History Successfully", HttpStatus.OK, response);

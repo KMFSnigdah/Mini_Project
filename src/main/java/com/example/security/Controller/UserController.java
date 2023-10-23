@@ -1,6 +1,7 @@
 package com.example.security.Controller;
 
 import com.example.security.DTO.response.ResponseBook;
+import com.example.security.DTO.response.UserAllInfoDto;
 import com.example.security.DTO.response.UserResponseDTO;
 import com.example.security.entity.User;
 import com.example.security.response.ResponseHandler;
@@ -28,10 +29,17 @@ public class UserController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Object> getUserByUserId(@PathVariable(value = "userId") long userId){
-        UserResponseDTO response = userService.getUserById(userId);
+    @GetMapping("/userInfo")
+    public ResponseEntity<Object> getUserByUserId(){
+        User user = authenticationService.getAuthenticatedUser();
+        UserResponseDTO response = userService.getUserById(user.getId());
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllUsers(){
+        List<UserAllInfoDto> getAllUsers = userService.getAllUsers();
+       return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, getAllUsers);
     }
 
     @GetMapping("/{userId}/books")
@@ -41,10 +49,10 @@ public class UserController {
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
     }
 
-    @GetMapping("/{userId}/borrowed-books")
-    public ResponseEntity<Object> getCurrentlyBorrowBooksByUserId(@PathVariable(value = "userId") long userId){
+    @GetMapping("/borrowed-books")
+    public ResponseEntity<Object> getCurrentlyBorrowBooksByUserId(){
         User user = authenticationService.getAuthenticatedUser();
-        List<ResponseBook> response = userService.getListCurrentlyBorrowBookByUserId(user,userId);
+        List<ResponseBook> response = userService.getListCurrentlyBorrowBookByUserId(user,user.getId());
         return  ResponseHandler.generateResponse("Fetch Data Successfully", HttpStatus.OK, response);
     }
 }
